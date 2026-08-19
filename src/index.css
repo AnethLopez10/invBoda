@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  background-color: #F5F0E8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.vintage-card {
+  @apply bg-marfil/90 backdrop-blur-sm rounded-2xl shadow-xl shadow-olivo/10 border border-ostion-oscuro/60;
+}
+
+.vintage-card-hero {
+  @apply bg-marfil/[0.97] backdrop-blur-md rounded-2xl shadow-xl shadow-olivo/20 border border-ostion-oscuro/60;
+}
+
+.vintage-photo-bg {
+  @apply absolute inset-0 w-full h-full object-cover vintage-photo-filter;
+  object-position: center 45%;
+}
+
+@media (min-width: 768px) {
+  .vintage-photo-bg {
+    object-position: center center;
+  }
+}
+
+.vintage-photo-filter {
+  filter: sepia(8%) contrast(1.06) brightness(1);
+}
+
+.vintage-overlay-hero {
+  background: linear-gradient(
+    to bottom,
+    rgba(74, 85, 48, 0.35) 0%,
+    rgba(74, 85, 48, 0.15) 50%,
+    rgba(74, 85, 48, 0.45) 100%
+  );
+}
+
+.vintage-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(74, 85, 48, 0.18) 100%
+  );
+}
+
+.vintage-frame {
+  @apply relative;
+}
+
+.vintage-frame::before,
+.vintage-frame::after {
+  content: '';
+  @apply absolute inset-0 border border-olivo/30 rounded-lg pointer-events-none;
+}
+
+.vintage-frame::before {
+  transform: rotate(1deg);
+}
+
+.vintage-frame::after {
+  transform: rotate(-1deg);
+  border-color: rgba(107, 123, 60, 0.2);
+}
+
+.vintage-divider {
+  @apply h-px w-24 mx-auto bg-gradient-to-r from-transparent via-olivo/40 to-transparent;
+}
+
+.section-title {
+  @apply font-cormorant text-3xl md:text-4xl font-semibold text-olivo-oscuro text-center;
+}
+
+.section-subtitle {
+  @apply font-vibes text-2xl md:text-3xl text-olivo text-center;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-full
+    bg-olivo text-ostion font-cormorant font-semibold text-lg
+    hover:bg-olivo-oscuro transition-colors duration-300 shadow-md;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-full
+    border-2 border-olivo text-olivo font-cormorant font-semibold text-lg
+    hover:bg-olivo/10 transition-colors duration-300;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #6B7B3C;
+}
+
+.satin-bg {
+  background:
+    linear-gradient(135deg, #4A5530 0%, #3D4628 25%, #4A5530 50%, #354020 75%, #4A5530 100%);
+  background-size: 200% 200%;
+}
+
+.embossed-card {
+  @apply bg-marfil relative rounded-sm shadow-2xl;
+  box-shadow:
+    0 8px 32px rgba(74, 85, 48, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.embossed-card::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(107, 123, 60, 0.25);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.embossed-card::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(107, 123, 60, 0.12);
+  pointer-events: none;
+}
+
+.wave-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.monogram-overlay {
+  @apply font-vibes text-white/90 select-none pointer-events-none;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.sealed-card {
+  @apply relative bg-marfil border-4 border-olivo rounded-sm;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

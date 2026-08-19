@@ -1,0 +1,45 @@
+import { useMemo } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import { QrCode } from 'lucide-react';
+import { eventConfig } from '../data/eventConfig';
+import ScrollReveal from './ScrollReveal';
+
+const QrSection = () => {
+  const qrUrl = useMemo(() => {
+    if (eventConfig.invitationUrl) {
+      return eventConfig.invitationUrl;
+    }
+    if (typeof window !== 'undefined') {
+      return window.location.origin + window.location.pathname;
+    }
+    return 'https://invitacion-boda.example.com';
+  }, []);
+
+  return (
+    <ScrollReveal variant="scale" className="max-w-md mx-auto px-4 py-12">
+      <h2 className="section-title mb-2">Invitación Digital</h2>
+      <p className="section-subtitle mb-8">Escanea para ver la invitación</p>
+
+      <div className="vintage-card p-6 flex flex-col items-center">
+        <QrCode className="text-olivo mb-4" size={28} />
+
+        <div className="bg-white p-4 rounded-xl border border-ostion-oscuro/50 shadow-inner">
+          <QRCodeSVG
+            value={qrUrl}
+            size={180}
+            level="M"
+            fgColor="#4A5530"
+            bgColor="#FFFFFF"
+            includeMargin={false}
+          />
+        </div>
+
+        <p className="font-cormorant text-olivo/70 text-center mt-4 text-base">
+          Comparte este código con quienes desees invitar
+        </p>
+      </div>
+    </ScrollReveal>
+  );
+};
+
+export default QrSection;
