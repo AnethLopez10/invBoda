@@ -1,8 +1,5 @@
 services:
   invboda:
-    build:
-      context: .
-      args:
-        VITE_INVITATION_URL: ${VITE_INVITATION_URL:-http://localhost:8080}
+    build: .
     ports:
       - "8080:8080"
