@@ -1,43 +1,60 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, ImageOff } from 'lucide-react';
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
+import { usePreloadImages } from '../hooks/usePreloadImages';
 
 const AUTO_INTERVAL = 4000;
 
-const PhotoPlaceholder = () => (
-  <div className="w-full h-full flex flex-col items-center justify-center bg-ostion-oscuro/30 border-2 border-dashed border-olivo/30 rounded-xl">
-    <Camera className="text-olivo/40 mb-3" size={40} />
-    <p className="font-cormorant text-olivo/60 text-lg">Foto próximamente</p>
-  </div>
+const PhotoSkeleton = () => (
+  <div className="w-full h-full rounded-xl bg-ostion-oscuro/30 animate-pulse" />
 );
 
-const PhotoSlide = ({ src, alt, eager = false }) => {
+const PhotoSlide = ({ src, alt }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState(src);
+  const [retried, setRetried] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+    setIsLoaded(false);
+    setRetried(false);
+  }, [src]);
+
+  const handleError = () => {
+    if (!retried) {
+      setRetried(true);
+      setImgSrc(`${src}?t=${Date.now()}`);
+      return;
+    }
+    setHasError(true);
+  };
 
   if (hasError) {
-    return <PhotoPlaceholder />;
+    return <PhotoSkeleton />;
   }
 
   return (
     <div className="relative w-full h-full">
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-ostion-oscuro/20 rounded-xl">
-          <ImageOff className="text-olivo/30 animate-pulse" size={32} />
+        <div className="absolute inset-0">
+          <PhotoSkeleton />
         </div>
       )}
       <img
-        src={src}
+        src={imgSrc}
         alt={alt}
-        loading={eager ? 'eager' : 'lazy'}
+        loading="eager"
+        decoding="async"
         draggable={false}
-        className={`w-full h-full object-cover rounded-xl vintage-photo-filter transition-opacity duration-300 ${
+        fetchPriority="high"
+        className={`w-full h-full object-cover rounded-xl vintage-photo-filter transition-opacity duration-500 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         onLoad={() => setIsLoaded(true)}
-        onError={() => setHasError(true)}
+        onError={handleError}
       />
     </div>
   );
@@ -56,6 +73,8 @@ const PhotoGallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
+
+  usePreloadImages(photos);
 
   const goNext = useCallback(() => {
     setDirection(1);
@@ -90,7 +109,7 @@ const PhotoGallery = () => {
             const stackPos = i + 1;
             return (
               <motion.div
-                key={`back-${stackPos}`}
+                key={`back-${stackPos}-${photoIndex}`}
                 className="absolute inset-0 vintage-card p-2.5 pointer-events-none"
                 style={{ zIndex: 3 - stackPos }}
                 animate={stackVariants(stackPos)}
@@ -138,7 +157,6 @@ const PhotoGallery = () => {
                 <PhotoSlide
                   src={photos[currentIndex]}
                   alt={`${couple.bride} y ${couple.groom} - foto ${currentIndex + 1}`}
-                  eager={currentIndex === 0}
                 />
               </div>
             </motion.div>

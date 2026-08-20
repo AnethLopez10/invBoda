@@ -78,3 +78,10 @@ export const allGuests = [
   ...guestFamilies.map((g) => ({ ...g, category: 'Familiar' })),
   ...guestFriends.map((g) => ({ ...g, category: 'Amigo' })),
 ];
+
+export const guestSearchOptions = allGuests.map((guest) => ({
+  label: guest.name,
+  count: guest.count,
+  category: guest.category,
+  searchText: guest.name.toLowerCase(),
+}));

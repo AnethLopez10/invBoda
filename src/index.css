@@ -10,11 +10,15 @@ body {
   font-family: 'Cormorant Garamond', serif;
   background-color: #F5F0E8;
   overflow-x: hidden;
+  touch-action: pan-y;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .paper-grain {

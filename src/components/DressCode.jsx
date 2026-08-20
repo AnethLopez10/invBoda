@@ -22,20 +22,27 @@ const DressCode = () => {
 
       <div className="px-6 py-12 text-center max-w-md mx-auto">
         <p className="font-vibes text-5xl md:text-6xl text-olivo-oscuro mb-1">{dressCode.title}</p>
-        <p className="font-cormorant text-sm uppercase tracking-[0.3em] text-olivo mb-6">Code</p>
+        <p className="font-cormorant text-sm uppercase tracking-[0.3em] text-olivo mb-4">Code</p>
         <p className="font-cormorant text-lg uppercase tracking-[0.15em] text-olivo-oscuro mb-8">
           {dressCode.subtitle}
         </p>
 
-        <div className="flex justify-center gap-4">
-          {dressCode.colors.map((color) => (
+        <p className="font-cormorant text-sm uppercase tracking-[0.12em] text-olivo/70 mb-5">
+          Colores reservados — no utilizar
+        </p>
+
+        <div className="flex justify-center gap-8">
+          {dressCode.reservedColors.map((color) => (
             <div key={color.name} className="flex flex-col items-center gap-2">
               <div
-                className="w-10 h-10 rounded-full border border-olivo/20 shadow-sm"
+                className="w-12 h-12 rounded-full border-2 border-olivo/30 shadow-sm relative"
                 style={{ backgroundColor: color.hex }}
-                title={color.name}
-              />
-              <span className="font-cormorant text-xs text-olivo/60">{color.name}</span>
+              >
+                <span className="absolute inset-0 flex items-center justify-center text-white/90 text-lg font-bold">
+                  ×
+                </span>
+              </div>
+              <span className="font-cormorant text-sm text-olivo-oscuro font-medium">{color.name}</span>
             </div>
           ))}
         </div>

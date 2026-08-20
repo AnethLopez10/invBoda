@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useRef, useCallback } from 'react';
 
 const MusicContext = createContext(null);
 
@@ -6,6 +6,25 @@ export function MusicProvider({ children }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasAudio, setHasAudio] = useState(true);
   const audioRef = useRef(null);
+
+  const playMusic = useCallback(() => {
+    if (!hasAudio || !audioRef.current || isPlaying) return;
+
+    audioRef.current.volume = 0;
+    audioRef.current
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+        const fadeIn = setInterval(() => {
+          if (audioRef.current && audioRef.current.volume < 0.3) {
+            audioRef.current.volume = Math.min(0.3, audioRef.current.volume + 0.05);
+          } else {
+            clearInterval(fadeIn);
+          }
+        }, 200);
+      })
+      .catch(() => setIsPlaying(false));
+  }, [hasAudio, isPlaying]);
 
   const togglePlay = useCallback(() => {
     if (!hasAudio || !audioRef.current) return;
@@ -22,46 +41,18 @@ export function MusicProvider({ children }) {
         }
       }, 100);
     } else {
-      audioRef.current.volume = 0;
-      audioRef.current
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-          const fadeIn = setInterval(() => {
-            if (audioRef.current.volume < 0.3) {
-              audioRef.current.volume += 0.05;
-            } else {
-              clearInterval(fadeIn);
-            }
-          }, 200);
-        })
-        .catch(() => {});
+      playMusic();
     }
-  }, [hasAudio, isPlaying]);
+  }, [hasAudio, isPlaying, playMusic]);
 
   const handleAudioError = () => {
     setHasAudio(false);
     setIsPlaying(false);
   };
 
-  useEffect(() => {
-    const attemptAutoplay = async () => {
-      if (audioRef.current) {
-        try {
-          audioRef.current.volume = 0.3;
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch {
-          setIsPlaying(false);
-        }
-      }
-    };
-    attemptAutoplay();
-  }, []);
-
   return (
-    <MusicContext.Provider value={{ isPlaying, hasAudio, togglePlay }}>
-      <audio ref={audioRef} src="/musica.mp3" loop onError={handleAudioError} />
+    <MusicContext.Provider value={{ isPlaying, hasAudio, togglePlay, playMusic }}>
+      <audio ref={audioRef} src="/musica.mp3" loop preload="auto" onError={handleAudioError} />
       {children}
     </MusicContext.Provider>
   );

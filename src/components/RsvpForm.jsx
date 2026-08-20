@@ -4,6 +4,7 @@ import { eventConfig, buildWhatsAppUrl, buildRsvpMessage } from '../data/eventCo
 import ScrollReveal from './ScrollReveal';
 import WaxSeal from './ui/WaxSeal';
 import WaveDivider from './ui/WaveDivider';
+import GuestAutocomplete from './GuestAutocomplete';
 
 const RsvpForm = () => {
   const [names, setNames] = useState(['']);
@@ -62,25 +63,26 @@ const RsvpForm = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block font-cormorant text-olivo-oscuro font-semibold mb-3 text-sm">
-                Nombre(s) de quienes asistirán
+                Nombre(s) o familia de quienes asistirán
               </label>
+              <p className="font-cormorant text-xs text-olivo/60 mb-3">
+                Escribe para buscar en la lista de invitados o agrega manualmente
+              </p>
               <div className="space-y-3">
                 {names.map((name, index) => (
                   <div key={index} className="flex gap-2">
-                    <input
-                      type="text"
+                    <GuestAutocomplete
+                      id={`guest-name-${index}`}
                       value={name}
-                      onChange={(e) => updateName(index, e.target.value)}
-                      placeholder={`Nombre ${index + 1}`}
-                      className="flex-1 px-4 py-3 rounded border-2 border-ostion-oscuro/60
-                        bg-white font-cormorant text-lg text-olivo-oscuro focus:border-olivo transition-colors"
+                      onChange={(val) => updateName(index, val)}
+                      placeholder={`Nombre o familia ${index + 1}`}
                     />
                     {names.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeNameField(index)}
                         className="w-11 h-11 rounded border border-ostion-oscuro/60 flex items-center
-                          justify-center text-olivo/60 hover:text-olivo"
+                          justify-center text-olivo/60 hover:text-olivo shrink-0"
                         aria-label="Eliminar nombre"
                       >
                         <X size={18} />

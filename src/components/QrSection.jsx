@@ -1,19 +1,10 @@
-import { useMemo } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { QrCode } from 'lucide-react';
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
 
 const QrSection = () => {
-  const qrUrl = useMemo(() => {
-    if (eventConfig.invitationUrl) {
-      return eventConfig.invitationUrl;
-    }
-    if (typeof window !== 'undefined') {
-      return window.location.origin + window.location.pathname;
-    }
-    return 'https://invitacion-boda.example.com';
-  }, []);
+  const qrUrl = eventConfig.invitationUrl;
 
   return (
     <ScrollReveal variant="scale" className="max-w-md mx-auto px-4 py-12">

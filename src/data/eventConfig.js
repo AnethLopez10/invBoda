@@ -36,7 +36,7 @@ export const eventConfig = {
   whatsapp: {
     number: '524443788703',
     defaultMessage:
-      '¡Hola, Mar y Oscar! Con mucho gusto confirmamos nuestra asistencia a su boda.\n¡Nos vemos en su gran día! 💍🤍',
+      '¡Hola, Mar y Oscar!\nCon mucho gusto confirmamos nuestra asistencia a su boda.\n¡Nos vemos en su gran día!',
   },
   giftRegistry: {
     url: '',
@@ -45,14 +45,12 @@ export const eventConfig = {
   dressCode: {
     title: 'Dress Code',
     subtitle: 'Formal elegante',
-    colors: [
-      { name: 'Olivo', hex: '#6B7B3C' },
-      { name: 'Ostión', hex: '#F5F0E8' },
-      { name: 'Marfil', hex: '#FAFAF7' },
-      { name: 'Tierra', hex: '#8B7355' },
+    reservedColors: [
+      { name: 'Verde Olivo', hex: '#6B7B3C' },
+      { name: 'Dorado', hex: '#C9A962' },
     ],
   },
-  invitationUrl: import.meta.env.VITE_INVITATION_URL || '',
+  invitationUrl: import.meta.env.VITE_INVITATION_URL || 'https://bodaoym.zeabur.app/',
   heroPhoto: '/images/novios/IMG_8729.jpg',
   heroPhotoAlt: '/images/novios/IMG_8801.jpg',
   photos: {
@@ -86,5 +84,5 @@ export function buildRsvpMessage(names) {
   if (!trimmed) {
     return eventConfig.whatsapp.defaultMessage;
   }
-  return `¡Hola, Mar y Oscar!\n\nConfirmamos nuestra asistencia a su boda.\n\nAsistiremos:\n${trimmed}\n\n¡Nos vemos en su gran día! 💍🤍`;
+  return `¡Hola, Mar y Oscar!\n\nConfirmamos nuestra asistencia a su boda.\n\nAsistiremos:\n${trimmed}\n\n¡Nos vemos en su gran día!`;
 }

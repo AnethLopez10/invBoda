@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MusicProvider } from './context/MusicContext';
 import EnvelopeIntro from './components/EnvelopeIntro';
-import MusicPlayer from './components/MusicPlayer';
-import WhatsAppButton from './components/WhatsAppButton';
+import FloatingControls from './components/FloatingControls';
 import HeroCover from './components/HeroCover';
 import WelcomeSection from './components/WelcomeSection';
 import DateHighlight from './components/DateHighlight';
@@ -31,10 +30,9 @@ function InvitationContent() {
 
       {introDone && (
         <div className="min-h-screen bg-ostion relative">
-          <MusicPlayer />
-          <WhatsAppButton />
+          <FloatingControls />
 
-          <main className="relative">
+          <main className="relative pb-28">
             <HeroCover />
             <WelcomeSection />
             <DateHighlight />

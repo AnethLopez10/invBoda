@@ -1,11 +1,8 @@
 import { motion } from 'framer-motion';
-import { Play, Pause } from 'lucide-react';
 import { eventConfig } from '../data/eventConfig';
-import { useMusic } from '../context/MusicContext';
 
 const HeroCover = () => {
   const { dateShort, heroPhoto } = eventConfig;
-  const { isPlaying, hasAudio, togglePlay } = useMusic();
 
   return (
     <section className="relative w-full min-h-[85dvh] max-h-[700px] overflow-hidden">
@@ -41,19 +38,7 @@ const HeroCover = () => {
           </span>
         </motion.div>
 
-        {hasAudio && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.9 }}
-            onClick={togglePlay}
-            className="w-14 h-14 rounded-full bg-olivo text-ostion shadow-xl
-              flex items-center justify-center -mb-7 z-20 border-4 border-ostion"
-            aria-label={isPlaying ? 'Pausar música' : 'Reproducir música'}
-          >
-            {isPlaying ? <Pause size={22} fill="currentColor" /> : <Play size={22} fill="currentColor" className="ml-0.5" />}
-          </motion.button>
-        )}
+        <div className="h-4" />
       </div>
     </section>
   );

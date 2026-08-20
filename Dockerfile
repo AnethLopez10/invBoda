@@ -5,7 +5,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY index.html vite.config.js postcss.config.js tailwind.config.js ./
+COPY public ./public
+COPY src ./src
 
 ARG VITE_INVITATION_URL=
 ENV VITE_INVITATION_URL=$VITE_INVITATION_URL
@@ -14,9 +16,14 @@ RUN npm run build
 
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache gettext
+
+COPY nginx.conf /etc/nginx/conf.d/configfile.template
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+ENV PORT=8080
+ENV HOST=0.0.0.0
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8080
+
+CMD sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
