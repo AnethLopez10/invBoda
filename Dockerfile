@@ -18,12 +18,14 @@ FROM nginx:alpine
 
 RUN apk add --no-cache gettext
 
-COPY nginx.conf /etc/nginx/conf.d/configfile.template
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh && rm -f /etc/nginx/conf.d/default.conf
+
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 ENV PORT=8080
-ENV HOST=0.0.0.0
 
 EXPOSE 8080
 
-CMD sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+ENTRYPOINT ["/docker-entrypoint.sh"]
