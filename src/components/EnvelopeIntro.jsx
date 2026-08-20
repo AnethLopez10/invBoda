@@ -40,6 +40,14 @@ const EnvelopeIntro = ({ onComplete }) => {
   const handleOpen = () => {
     if (phase !== 'idle') return;
     playMusic();
+
+    const preload = (src) => {
+      const img = new Image();
+      img.src = src;
+    };
+    preload(eventConfig.heroPhoto);
+    preload(eventConfig.photos.banner1);
+
     setPhase('opening');
     setTimeout(() => setPhase('card'), 700);
     setTimeout(() => setPhase('exit'), 2200);

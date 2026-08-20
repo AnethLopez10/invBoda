@@ -5,6 +5,7 @@ import ScrollReveal from './ScrollReveal';
 import WaxSeal from './ui/WaxSeal';
 import WaveDivider from './ui/WaveDivider';
 import GuestAutocomplete from './GuestAutocomplete';
+import { OptimizedImage } from './OptimizedImage';
 
 const RsvpForm = () => {
   const [names, setNames] = useState(['']);
@@ -31,10 +32,9 @@ const RsvpForm = () => {
   return (
     <ScrollReveal variant="up" className="bg-ostion">
       <div className="relative w-full aspect-[5/4] max-h-[320px] overflow-hidden">
-        <img
+        <OptimizedImage
           src={photos.rsvp}
           alt=""
-          loading="lazy"
           className="w-full h-full object-cover vintage-photo-filter"
           style={{ objectPosition: 'center 35%' }}
         />

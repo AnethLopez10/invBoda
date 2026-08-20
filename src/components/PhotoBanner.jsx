@@ -1,13 +1,13 @@
 import ScrollReveal from './ScrollReveal';
 import WaveDivider from './ui/WaveDivider';
+import { OptimizedImage } from './OptimizedImage';
 
 const PhotoBanner = ({ src, alt = '', className = '' }) => (
   <ScrollReveal variant="fade" className={`relative w-full ${className}`}>
     <div className="relative w-full aspect-[4/5] max-h-[420px] overflow-hidden">
-      <img
+      <OptimizedImage
         src={src}
         alt={alt}
-        loading="lazy"
         className="w-full h-full object-cover vintage-photo-filter wave-fade-bottom"
       />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-ostion to-transparent" />

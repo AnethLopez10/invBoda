@@ -1,3 +1,5 @@
+import { weddingImage } from '../utils/images';
+
 export const eventConfig = {
   couple: {
     bride: 'Marbella Montenegro',
@@ -51,27 +53,27 @@ export const eventConfig = {
     ],
   },
   invitationUrl: import.meta.env.VITE_INVITATION_URL || 'https://bodaoym.zeabur.app/',
-  heroPhoto: '/images/novios/IMG_8729.jpg',
-  heroPhotoAlt: '/images/novios/IMG_8801.jpg',
+  heroPhoto: weddingImage('IMG_8729.jpg'),
+  heroPhotoAlt: weddingImage('IMG_8801.jpg'),
   photos: {
-    banner1: '/images/novios/IMG_8805.jpg',
-    banner2: '/images/novios/IMG_8731.jpg',
-    dressCode: '/images/novios/IMG_8713.jpg',
-    rsvp: '/images/novios/IMG_8801.jpg',
+    banner1: weddingImage('IMG_8805.jpg'),
+    banner2: weddingImage('IMG_8731.jpg'),
+    dressCode: weddingImage('IMG_8713.jpg'),
+    rsvp: weddingImage('IMG_8801.jpg'),
   },
   gallery: [
-    '/images/novios/IMG_8729.jpg',
-    '/images/novios/IMG_8713.jpg',
-    '/images/novios/IMG_8805.jpg',
-    '/images/novios/IMG_8801.jpg',
-    '/images/novios/IMG_8725.jpg',
-    '/images/novios/IMG_8731.jpg',
-    '/images/novios/IMG_8850.jpg',
-    '/images/novios/IMG_8998.jpg',
-    '/images/novios/IMG_8865.jpg',
-    '/images/novios/IMG_8932.jpg',
-    '/images/novios/IMG_8983.jpg',
-    '/images/novios/IMG_8795.jpg',
+    weddingImage('IMG_8729.jpg'),
+    weddingImage('IMG_8713.jpg'),
+    weddingImage('IMG_8805.jpg'),
+    weddingImage('IMG_8801.jpg'),
+    weddingImage('IMG_8725.jpg'),
+    weddingImage('IMG_8731.jpg'),
+    weddingImage('IMG_8850.jpg'),
+    weddingImage('IMG_8998.jpg'),
+    weddingImage('IMG_8865.jpg'),
+    weddingImage('IMG_8932.jpg'),
+    weddingImage('IMG_8983.jpg'),
+    weddingImage('IMG_8795.jpg'),
   ],
 };
 

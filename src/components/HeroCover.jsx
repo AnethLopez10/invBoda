@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion';
 import { eventConfig } from '../data/eventConfig';
+import { OptimizedImage } from './OptimizedImage';
 
 const HeroCover = () => {
   const { dateShort, heroPhoto } = eventConfig;
 
   return (
     <section className="relative w-full min-h-[85dvh] max-h-[700px] overflow-hidden">
-      <img
+      <OptimizedImage
         src={heroPhoto}
         alt=""
+        priority
         className="absolute inset-0 w-full h-full object-cover vintage-photo-filter"
         style={{ objectPosition: 'center 40%' }}
-        loading="eager"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/20" />
 

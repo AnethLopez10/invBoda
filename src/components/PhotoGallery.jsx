@@ -2,71 +2,53 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
-import { usePreloadImages } from '../hooks/usePreloadImages';
+import { OptimizedImage, PhotoSkeleton } from './OptimizedImage';
 
 const AUTO_INTERVAL = 4000;
 
-const PhotoSkeleton = () => (
-  <div className="w-full h-full rounded-xl bg-ostion-oscuro/30 animate-pulse" />
-);
-
-const PhotoSlide = ({ src, alt }) => {
-  const [hasError, setHasError] = useState(false);
+const PhotoSlide = ({ src, alt, priority = false }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [imgSrc, setImgSrc] = useState(src);
-  const [retried, setRetried] = useState(false);
 
   useEffect(() => {
-    setImgSrc(src);
-    setHasError(false);
     setIsLoaded(false);
-    setRetried(false);
   }, [src]);
-
-  const handleError = () => {
-    if (!retried) {
-      setRetried(true);
-      setImgSrc(`${src}?t=${Date.now()}`);
-      return;
-    }
-    setHasError(true);
-  };
-
-  if (hasError) {
-    return <PhotoSkeleton />;
-  }
 
   return (
     <div className="relative w-full h-full">
       {!isLoaded && (
         <div className="absolute inset-0">
-          <PhotoSkeleton />
+          <PhotoSkeleton className="rounded-xl" />
         </div>
       )}
-      <img
-        src={imgSrc}
+      <OptimizedImage
+        src={src}
         alt={alt}
-        loading="eager"
-        decoding="async"
-        draggable={false}
-        fetchPriority="high"
+        priority={priority}
         className={`w-full h-full object-cover rounded-xl vintage-photo-filter transition-opacity duration-500 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         onLoad={() => setIsLoaded(true)}
-        onError={handleError}
       />
     </div>
   );
 };
 
-const stackVariants = (stackPos) => ({
-  opacity: 1 - stackPos * 0.14,
-  x: stackPos * 8,
-  y: stackPos * 16,
-  rotate: stackPos * (stackPos % 2 === 0 ? -2.5 : 2.5),
-  scale: 1 - stackPos * 0.05,
-});
+const StackPlaceholder = ({ stackPos }) => (
+  <motion.div
+    className="absolute inset-0 vintage-card p-2.5 pointer-events-none"
+    style={{ zIndex: 3 - stackPos }}
+    animate={{
+      opacity: 1 - stackPos * 0.14,
+      x: stackPos * 8,
+      y: stackPos * 16,
+      rotate: stackPos * (stackPos % 2 === 0 ? -2.5 : 2.5),
+      scale: 1 - stackPos * 0.05,
+    }}
+    transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+  >
+    <div className="w-full h-full rounded-lg bg-gradient-to-br from-ostion-oscuro/40 to-olivo/10 border border-ostion-oscuro/30" />
+  </motion.div>
+);
 
 const PhotoGallery = () => {
   const { gallery: photos, couple } = eventConfig;
@@ -74,7 +56,16 @@ const PhotoGallery = () => {
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
 
-  usePreloadImages(photos);
+  const preloadImage = useCallback((src) => {
+    if (!src) return;
+    const img = new Image();
+    img.src = src;
+  }, []);
+
+  useEffect(() => {
+    preloadImage(photos[currentIndex]);
+    preloadImage(photos[(currentIndex + 1) % photos.length]);
+  }, [currentIndex, photos, preloadImage]);
 
   const goNext = useCallback(() => {
     setDirection(1);
@@ -87,10 +78,6 @@ const PhotoGallery = () => {
     const timer = setInterval(goNext, AUTO_INTERVAL);
     return () => clearInterval(timer);
   }, [goNext, isPaused, photos.length]);
-
-  const backIndices = [1, 2]
-    .filter((pos) => pos < photos.length)
-    .map((pos) => (currentIndex - pos + photos.length) % photos.length);
 
   return (
     <ScrollReveal variant="scale" className="max-w-md lg:max-w-2xl mx-auto px-4 py-12">
@@ -105,25 +92,8 @@ const PhotoGallery = () => {
         onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
       >
         <div className="relative aspect-[4/5] max-h-[420px]">
-          {backIndices.map((photoIndex, i) => {
-            const stackPos = i + 1;
-            return (
-              <motion.div
-                key={`back-${stackPos}-${photoIndex}`}
-                className="absolute inset-0 vintage-card p-2.5 pointer-events-none"
-                style={{ zIndex: 3 - stackPos }}
-                animate={stackVariants(stackPos)}
-                transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-              >
-                <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md">
-                  <PhotoSlide
-                    src={photos[photoIndex]}
-                    alt={`${couple.bride} y ${couple.groom} - foto ${photoIndex + 1}`}
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
+          <StackPlaceholder stackPos={2} />
+          <StackPlaceholder stackPos={1} />
 
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -157,6 +127,7 @@ const PhotoGallery = () => {
                 <PhotoSlide
                   src={photos[currentIndex]}
                   alt={`${couple.bride} y ${couple.groom} - foto ${currentIndex + 1}`}
+                  priority={currentIndex === 0}
                 />
               </div>
             </motion.div>

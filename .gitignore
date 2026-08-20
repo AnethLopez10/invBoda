@@ -1,5 +1,6 @@
 node_modules/
 dist/
+public/images/novios-webp/
 .env
 .env.*
 .DS_Store

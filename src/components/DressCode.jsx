@@ -1,6 +1,7 @@
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
 import WaveDivider from './ui/WaveDivider';
+import { OptimizedImage } from './OptimizedImage';
 
 const DressCode = () => {
   const { dressCode, photos } = eventConfig;
@@ -8,10 +9,9 @@ const DressCode = () => {
   return (
     <ScrollReveal variant="scale" className="bg-ostion">
       <div className="relative w-full aspect-[5/4] max-h-[360px] overflow-hidden">
-        <img
+        <OptimizedImage
           src={photos.dressCode}
           alt=""
-          loading="lazy"
           className="w-full h-full object-cover vintage-photo-filter"
           style={{ objectPosition: 'center 30%' }}
         />
