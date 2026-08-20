@@ -1,33 +1,100 @@
-import { useState } from 'react';
-import { Send, CalendarClock, UserPlus, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Send, CalendarClock, UserPlus, X, Loader2 } from 'lucide-react';
 import { eventConfig, buildWhatsAppUrl, buildRsvpMessage } from '../data/eventConfig';
+import { fetchConfirmations, submitRsvp } from '../api/rsvp';
 import ScrollReveal from './ScrollReveal';
 import WaxSeal from './ui/WaxSeal';
 import WaveDivider from './ui/WaveDivider';
 import GuestAutocomplete from './GuestAutocomplete';
 import { OptimizedImage } from './OptimizedImage';
 
+const emptyEntry = () => ({ text: '', guest: null });
+
 const RsvpForm = () => {
-  const [names, setNames] = useState(['']);
+  const [entries, setEntries] = useState([emptyEntry()]);
+  const [confirmations, setConfirmations] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
   const { rsvp, photos } = eventConfig;
 
-  const addNameField = () => setNames((prev) => [...prev, '']);
+  useEffect(() => {
+    fetchConfirmations()
+      .then(setConfirmations)
+      .catch(() => setConfirmations({}));
+  }, []);
+
+  const addNameField = () => setEntries((prev) => [...prev, emptyEntry()]);
   const removeNameField = (index) => {
-    if (names.length === 1) return;
-    setNames((prev) => prev.filter((_, i) => i !== index));
-  };
-  const updateName = (index, value) => {
-    setNames((prev) => prev.map((n, i) => (i === index ? value : n)));
+    if (entries.length === 1) return;
+    setEntries((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const updateEntry = (index, text, guest) => {
+    setEntries((prev) => prev.map((entry, i) => (i === index ? { text, guest } : entry)));
+  };
+
+  const buildGuestPayload = (entry) => {
+    if (entry.guest) {
+      return {
+        sheetLabel: entry.guest.sheetLabel,
+        count: entry.guest.count,
+        inputName: entry.guest.label,
+        source: 'list',
+      };
+    }
+
+    const trimmed = entry.text.trim();
+    const countMatch = trimmed.match(/\((\d+)\)\s*$/);
+    const count = countMatch ? Number(countMatch[1]) : 1;
+    const nameWithoutCount = countMatch
+      ? trimmed.replace(/\(\d+\)\s*$/, '').trim()
+      : trimmed;
+
+    return {
+      sheetLabel: count > 1 ? `${nameWithoutCount} (${count})` : nameWithoutCount,
+      count,
+      inputName: trimmed,
+      source: 'manual',
+    };
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const filledNames = names.filter((n) => n.trim()).join('\n');
+    const filledEntries = entries.filter((entry) => entry.text.trim());
+    if (filledEntries.length === 0) return;
+
+    const filledNames = filledEntries.map((entry) => entry.text.trim()).join('\n');
     const message = buildRsvpMessage(filledNames);
-    window.open(buildWhatsAppUrl(rsvp.whatsapp, message), '_blank', 'noopener,noreferrer');
+    const whatsappUrl = buildWhatsAppUrl(rsvp.whatsapp, message);
+
+    setIsSubmitting(true);
+    setStatusMessage('');
+
+    try {
+      const result = await submitRsvp(filledEntries.map(buildGuestPayload));
+      const savedCount = (result.updated?.length || 0) + (result.appended?.length || 0);
+      if (savedCount > 0) {
+        setStatusMessage('Confirmación registrada en la lista de invitados.');
+        const nextConfirmations = { ...confirmations };
+        result.updated?.forEach((item) => {
+          nextConfirmations[item.label] = item.count;
+        });
+        result.appended?.forEach((item) => {
+          nextConfirmations[item.label] = item.count;
+        });
+        setConfirmations(nextConfirmations);
+      } else if (result.errors?.length) {
+        setStatusMessage('No se pudo registrar en la lista, pero puedes continuar por WhatsApp.');
+      }
+    } catch {
+      setStatusMessage('No se pudo registrar en la lista, pero puedes continuar por WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
-  const hasValidNames = names.some((n) => n.trim());
+  const hasValidNames = entries.some((entry) => entry.text.trim());
 
   return (
     <ScrollReveal variant="up" className="bg-ostion">
@@ -69,15 +136,17 @@ const RsvpForm = () => {
                 Escribe para buscar en la lista de invitados o agrega manualmente
               </p>
               <div className="space-y-3">
-                {names.map((name, index) => (
+                {entries.map((entry, index) => (
                   <div key={index} className="flex gap-2">
                     <GuestAutocomplete
                       id={`guest-name-${index}`}
-                      value={name}
-                      onChange={(val) => updateName(index, val)}
+                      value={entry.text}
+                      guest={entry.guest}
+                      confirmations={confirmations}
+                      onChange={(text, guest) => updateEntry(index, text, guest)}
                       placeholder={`Nombre o familia ${index + 1}`}
                     />
-                    {names.length > 1 && (
+                    {entries.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeNameField(index)}
@@ -101,12 +170,16 @@ const RsvpForm = () => {
               </button>
             </div>
 
+            {statusMessage && (
+              <p className="font-cormorant text-sm text-olivo/80 text-center">{statusMessage}</p>
+            )}
+
             <button
               type="submit"
-              disabled={!hasValidNames}
+              disabled={!hasValidNames || isSubmitting}
               className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Send size={18} />
+              {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
               Confirmar por WhatsApp
             </button>
           </form>

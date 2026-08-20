@@ -4,6 +4,10 @@ export const guestStats = {
   total: 149,
 };
 
+export function formatSheetLabel(guest) {
+  return guest.count > 1 ? `${guest.name} (${guest.count})` : guest.name;
+}
+
 export const guestFamilies = [
   { name: 'Familia Hernandez Martinez (abuelos)', count: 4 },
   { name: 'Familia Hernandez Martinez', count: 3 },
@@ -79,8 +83,10 @@ export const allGuests = [
   ...guestFriends.map((g) => ({ ...g, category: 'Amigo' })),
 ];
 
-export const guestSearchOptions = allGuests.map((guest) => ({
+export const guestSearchOptions = allGuests.map((guest, id) => ({
+  id,
   label: guest.name,
+  sheetLabel: formatSheetLabel(guest),
   count: guest.count,
   category: guest.category,
   searchText: guest.name.toLowerCase(),

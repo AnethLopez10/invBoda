@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "optimize-images": "node scripts/optimize-images.mjs",
+    "server": "node server/index.js",
     "dev": "npm run optimize-images && vite",
     "build": "npm run optimize-images && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server/index.js"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
@@ -18,7 +20,10 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
+    "compression": "^1.8.1",
+    "express": "^5.1.0",
     "framer-motion": "^12.29.2",
+    "googleapis": "^160.0.0",
     "lucide-react": "^0.563.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.4",

@@ -17,11 +17,21 @@ RUN npm run optimize-images \
     && rm -f public/images/novios/*.jpg \
     && npx vite build
 
-FROM nginx:alpine
+FROM node:20-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY server ./server
+COPY shared ./shared
+COPY src/data/guestList.js ./src/data/guestList.js
+COPY --from=builder /app/dist ./dist
+
+ENV PORT=8080
+ENV GOOGLE_SHEET_ID=1YUC5tefU6Cuq6WaR-75Mua_L6mn4NahGH0_jAcUwy6Q
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server/index.js"]

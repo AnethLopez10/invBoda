@@ -3,5 +3,6 @@ dist/
 public/images/novios-webp/
 .env
 .env.*
+credentials.json
 .DS_Store
 *.log
