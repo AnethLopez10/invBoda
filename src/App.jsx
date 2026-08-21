@@ -29,7 +29,7 @@ function InvitationContent() {
       {!introDone && <EnvelopeIntro onComplete={handleIntroComplete} />}
 
       {introDone && (
-        <div className="min-h-screen bg-ostion relative">
+        <div className="min-h-screen relative">
           <FloatingControls />
 
           <main className="relative pb-28">

@@ -1,34 +1,30 @@
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
-import WaveDivider from './ui/WaveDivider';
-import { OptimizedImage } from './OptimizedImage';
+import TexturedSection from './ui/TexturedSection';
+
+const DRESSCODE_IMAGE = '/images/fondos/dresscode.jpeg';
 
 const DressCode = () => {
-  const { dressCode, photos } = eventConfig;
+  const { dressCode } = eventConfig;
 
   return (
-    <ScrollReveal variant="scale" className="bg-ostion">
-      <div className="relative w-full aspect-[5/4] max-h-[360px] overflow-hidden">
-        <OptimizedImage
-          src={photos.dressCode}
-          alt=""
-          className="w-full h-full object-cover vintage-photo-filter"
-          style={{ objectPosition: 'center 30%' }}
-        />
-        <div className="absolute inset-x-0 bottom-0">
-          <WaveDivider />
+    <ScrollReveal variant="scale" className="w-full">
+      <TexturedSection texture="fondo4" overlay={0.82} className="px-6 py-12 text-center max-w-md mx-auto">
+        <p className="font-parisienne text-5xl md:text-6xl text-olivo-oscuro mb-6">{dressCode.title}</p>
+
+        <div className="mb-8 overflow-hidden rounded-sm shadow-md border border-ostion-oscuro/40">
+          <img
+            src={DRESSCODE_IMAGE}
+            alt="Formal y elegante"
+            loading="lazy"
+            className="w-full h-auto object-cover object-top"
+          />
         </div>
-      </div>
 
-      <div className="px-6 py-12 text-center max-w-md mx-auto">
-        <p className="font-vibes text-5xl md:text-6xl text-olivo-oscuro mb-1">{dressCode.title}</p>
-        <p className="font-cormorant text-sm uppercase tracking-[0.3em] text-olivo mb-4">Code</p>
-        <p className="font-cormorant text-lg uppercase tracking-[0.15em] text-olivo-oscuro mb-8">
-          {dressCode.subtitle}
-        </p>
-
-        <p className="font-cormorant text-sm uppercase tracking-[0.12em] text-olivo/70 mb-5">
-          Colores reservados — no utilizar
+        <p className="font-cormorant text-sm uppercase tracking-[0.12em] text-olivo/70 mb-5 leading-relaxed">
+          Colores reservados
+          <br />
+          No utilizar
         </p>
 
         <div className="flex justify-center gap-8">
@@ -46,7 +42,7 @@ const DressCode = () => {
             </div>
           ))}
         </div>
-      </div>
+      </TexturedSection>
     </ScrollReveal>
   );
 };

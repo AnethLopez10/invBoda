@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
+import TexturedSection from './ui/TexturedSection';
 import { OptimizedImage, PhotoSkeleton } from './OptimizedImage';
 
 const AUTO_INTERVAL = 4000;
@@ -80,7 +81,8 @@ const PhotoGallery = () => {
   }, [goNext, isPaused, photos.length]);
 
   return (
-    <ScrollReveal variant="scale" className="max-w-md lg:max-w-2xl mx-auto px-4 py-12">
+    <ScrollReveal variant="scale" className="w-full">
+      <TexturedSection texture="fondo2" overlay={0.8} className="max-w-md lg:max-w-2xl mx-auto px-4 py-14">
       <h2 className="section-title mb-2">Nosotros</h2>
       <p className="section-subtitle mb-8">Nuestra historia</p>
 
@@ -160,6 +162,7 @@ const PhotoGallery = () => {
           ))}
         </div>
       </div>
+      </TexturedSection>
     </ScrollReveal>
   );
 };

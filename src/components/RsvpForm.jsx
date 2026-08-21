@@ -7,6 +7,7 @@ import WaxSeal from './ui/WaxSeal';
 import WaveDivider from './ui/WaveDivider';
 import GuestAutocomplete from './GuestAutocomplete';
 import { OptimizedImage } from './OptimizedImage';
+import TexturedSection from './ui/TexturedSection';
 
 const emptyEntry = () => ({ text: '', guest: null });
 
@@ -97,7 +98,7 @@ const RsvpForm = () => {
   const hasValidNames = entries.some((entry) => entry.text.trim());
 
   return (
-    <ScrollReveal variant="up" className="bg-ostion">
+    <ScrollReveal variant="up" className="w-full">
       <div className="relative w-full aspect-[5/4] max-h-[320px] overflow-hidden">
         <OptimizedImage
           src={photos.rsvp}
@@ -108,7 +109,7 @@ const RsvpForm = () => {
         <WaveDivider className="absolute bottom-0 left-0 right-0" />
       </div>
 
-      <div className="px-4 py-10 max-w-md mx-auto">
+      <TexturedSection texture="fondo4" overlay={0.82} className="px-4 py-10 max-w-md mx-auto">
         <div className="sealed-card p-6 pt-10 relative">
           <div className="absolute -top-7 left-1/2 -translate-x-1/2">
             <WaxSeal size={52} />
@@ -117,7 +118,7 @@ const RsvpForm = () => {
           <h2 className="font-cormorant text-2xl font-semibold text-olivo-oscuro text-center mb-2">
             Confirma tu asistencia
           </h2>
-          <p className="font-vibes text-xl text-olivo text-center mb-6">RSVP</p>
+          <p className="font-parisienne text-2xl text-olivo text-center mb-6">RSVP</p>
 
           <div className="flex items-center gap-3 mb-6 p-3 bg-olivo/5 rounded border border-olivo/15">
             <CalendarClock className="text-olivo shrink-0" size={20} />
@@ -184,7 +185,7 @@ const RsvpForm = () => {
             </button>
           </form>
         </div>
-      </div>
+      </TexturedSection>
     </ScrollReveal>
   );
 };

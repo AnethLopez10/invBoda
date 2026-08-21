@@ -23,6 +23,7 @@ export default {
       fontFamily: {
         cormorant: ['"Cormorant Garamond"', 'serif'],
         vibes: ['"Great Vibes"', 'cursive'],
+        parisienne: ['Parisienne', 'cursive'],
       },
     },
   },
