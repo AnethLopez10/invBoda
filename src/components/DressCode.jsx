@@ -2,7 +2,7 @@ import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
 import TexturedSection from './ui/TexturedSection';
 
-const DRESSCODE_IMAGE = '/images/fondos/dresscode.jpeg';
+const DRESSCODE_IMAGE = '/images/fondos/dresscode-sf.PNG';
 
 const DressCode = () => {
   const { dressCode } = eventConfig;
@@ -12,12 +12,16 @@ const DressCode = () => {
       <TexturedSection texture="fondo4" overlay={0.82} className="px-6 py-12 text-center max-w-md mx-auto">
         <p className="font-parisienne text-5xl md:text-6xl text-olivo-oscuro mb-6">{dressCode.title}</p>
 
-        <div className="mb-8 overflow-hidden rounded-sm shadow-md border border-ostion-oscuro/40">
+        <p className="font-parisienne text-4xl md:text-5xl text-olivo-oscuro mb-4 px-2">
+          Formal y elegante
+        </p>
+
+        <div className="mb-8 flex justify-center">
           <img
             src={DRESSCODE_IMAGE}
             alt="Formal y elegante"
             loading="lazy"
-            className="w-full h-auto object-cover object-top"
+            className="w-full max-w-[320px] h-auto object-contain"
           />
         </div>
 
