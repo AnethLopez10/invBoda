@@ -1,4 +1,4 @@
-import { Gift, Clock } from 'lucide-react';
+import { Gift } from 'lucide-react';
 import { eventConfig } from '../data/eventConfig';
 import ScrollReveal from './ScrollReveal';
 import TexturedSection from './ui/TexturedSection';
@@ -6,7 +6,6 @@ import EmbossedCard from './ui/EmbossedCard';
 
 const GiftRegistry = () => {
   const { giftRegistry } = eventConfig;
-  const hasUrl = Boolean(giftRegistry.url);
 
   return (
     <ScrollReveal variant="up" className="w-full">
@@ -16,29 +15,32 @@ const GiftRegistry = () => {
           <h2 className="font-parisienne text-4xl md:text-5xl text-olivo mb-2">{giftRegistry.label}</h2>
           <div className="h-px w-16 mx-auto bg-oro mb-6" />
 
-          {hasUrl ? (
-            <>
-              <p className="font-cormorant text-olivo/80 mb-6 leading-relaxed">
-                Tu presencia es nuestro mejor regalo, pero si deseas tener un detalle con nosotros,
-                puedes consultar nuestra mesa de regalos.
-              </p>
-              <a href={giftRegistry.url} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Ver mesa de regalos
-              </a>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center justify-center gap-2 text-olivo/60 mb-3">
-                <Clock size={20} />
-                <span className="font-cormorant uppercase tracking-widest text-sm font-semibold">
-                  Próximamente
-                </span>
-              </div>
-              <p className="font-cormorant text-olivo/70 italic leading-relaxed">
-                Muy pronto compartiremos el enlace a nuestra mesa de regalos.
-              </p>
-            </>
-          )}
+          <p className="font-cormorant text-olivo/80 mb-6 leading-relaxed">
+            Tu presencia es nuestro mejor regalo, pero si deseas tener un detalle con nosotros,
+            puedes consultar nuestra mesa de regalos en Liverpool.
+          </p>
+
+          <div className="mb-6 p-4 bg-olivo/5 rounded border border-olivo/15">
+            <p className="font-cormorant text-xs uppercase tracking-[0.2em] text-olivo/60 mb-2">
+              Número de evento
+            </p>
+            <p className="font-cormorant text-3xl font-bold text-olivo-oscuro tracking-wider tabular-nums">
+              {giftRegistry.eventNumber}
+            </p>
+          </div>
+
+          <a
+            href={giftRegistry.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary w-full"
+          >
+            Ir a mesa de regalos
+          </a>
+
+          <p className="font-cormorant text-sm text-olivo/60 mt-4 leading-relaxed">
+            Ingresa el número de evento en la página de Liverpool para ver nuestra lista.
+          </p>
         </EmbossedCard>
       </TexturedSection>
     </ScrollReveal>

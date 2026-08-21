@@ -41,7 +41,8 @@ export const eventConfig = {
       '¡Hola, Mar y Oscar!\nCon mucho gusto confirmamos nuestra asistencia a su boda.\n¡Nos vemos en su gran día!',
   },
   giftRegistry: {
-    url: '',
+    url: 'https://mesaderegalos.liverpool.com.mx/eventodebusqueda',
+    eventNumber: '51939439',
     label: 'Mesa de regalos',
   },
   dressCode: {
